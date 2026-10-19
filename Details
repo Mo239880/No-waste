@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的箱子管理系统</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* 左边：20个箱子的网格区域 */
+        .grid-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            align-content: start;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow-y: auto;
+        }
+
+        /* 箱子按钮样式 */
+        .box-btn {
+            background: #e0f2f1;
+            border: 2px solid #b2dfdb;
+            border-radius: 8px;
+            padding: 20px 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #00695c;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .box-btn::before {
+            content: "📦";
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .box-btn:hover {
+            background: #b2dfdb;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 105, 92, 0.2);
+        }
+        
+        .box-btn.active {
+            background: #00695c;
+            color: white;
+            border-color: #004d40;
+        }
+
+        /* 右边：明细展示区域 */
+        .detail-panel {
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-left: 5px solid #00695c;
+        }
+
+        .detail-panel h2 {
+            color: #00695c;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0f2f1;
+            padding-bottom: 10px;
+        }
+
+        .detail-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            flex: 1;
+        }
+
+        .detail-content span {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* 响应式：手机端上下排列 */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                height: auto;
+            }
+            .detail-panel {
+                width: 100%;
+                border-left: none;
+                border-top: 5px solid #00695c;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 左侧/上方：20个箱子 -->
+    <div class="grid-container" id="gridContainer">
+        <!-- JavaScript 会自动生成20个按钮放在这里 -->
+    </div>
+
+    <!-- 右侧/下方：明细面板 -->
+    <div class="detail-panel">
+        <h2 id="panelTitle">箱子明细</h2>
+        <div class="detail-content" id="panelContent">
+            👈 请点击左侧的任意一个箱子查看明细。
+        </div>
+    </div>
+
+    <script>
+        const gridContainer = document.getElementById('gridContainer');
+        const panelTitle = document.getElementById('panelTitle');
+        const panelContent = document.getElementById('panelContent');
+
+        // 模拟一些假数据（你可以以后自己去改这些内容）
+        const detailData = [
+            "重量: 5kg<br>状态: 已打包<br>目的地: 北京",
+            "重量: 12kg<br>状态: 待发出<br>目的地: 上海",
+            "重量: 3kg<br>状态: 运输中<br>目的地: 广州",
+            "重量: 8kg<br>状态: 已签收<br>目的地: 深圳",
+            // 5-20 的数据...
+        ];
+
+        // 循环创建20个箱子
+        for (let i = 1; i <= 20; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'box-btn';
+            btn.innerText = `箱子 ${i}`;
+            
+            // 点击事件
+            btn.addEventListener('click', function() {
+                // 1. 移除其他按钮的激活状态
+                document.querySelectorAll('.box-btn').forEach(b => b.classList.remove('active'));
+                // 2. 给当前点击的按钮加上激活状态
+                this.classList.add('active');
+                
+                // 3. 更新右侧面板的标题
+                panelTitle.innerText = `箱子 ${i} 的详细信息`;
+                
+                // 4. 更新右侧面板的内容 (循环利用假数据，或者你可以写满20条)
+                let content = detailData[i % detailData.length]; 
+                panelContent.innerHTML = `
+                    编号: <span>BOX-${i.toString().padStart(3, '0')}</span><br><br>
+                    ${content}
+                `;
+            });
+
+            gridContainer.appendChild(btn);
+        }
+    </script>
+</body>
+</html>
