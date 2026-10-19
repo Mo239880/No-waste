@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>木箱库存多语言版</title>
+    <title>50个独立木箱库存</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -23,24 +23,24 @@
             padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;
             font-size: 14px; cursor: pointer; outline: none;
         }
-        /* 左侧木箱 */
+        /* 左侧木箱网格 */
         .grid-container {
             flex: 1; display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: 15px; align-content: start;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px; align-content: start;
             background: #fff; padding: 20px; border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-y: auto;
             margin-top: 50px;
         }
         .wood-box-btn {
             background: #8d6e63; border: 2px solid #5d4037;
-            border-radius: 6px; padding: 15px 10px;
-            font-size: 16px; font-weight: bold; color: #fff;
+            border-radius: 6px; padding: 12px 5px;
+            font-size: 14px; font-weight: bold; color: #fff;
             cursor: pointer; transition: all 0.2s ease;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1);
         }
-        .wood-box-btn::before { content: "📦"; font-size: 24px; margin-bottom: 5px; }
+        .wood-box-btn::before { content: "📦"; font-size: 20px; margin-bottom: 5px; }
         .wood-box-btn:hover { background: #795548; transform: translateY(-3px); }
         .wood-box-btn.active { background: #3e2723; border-color: #ffb300; color: #ffb300; }
 
@@ -102,9 +102,7 @@
     </div>
 
     <script>
-        // ==========================================
-        // 🌐 1. 界面通用多语言字典
-        // ==========================================
+        // 🌐 1. 界面多语言字典
         const translations = {
             zh: { selectBox: "请选择木箱", clickTip: "👈 点击左侧任意木箱，查看里面的纸箱明细。", boxName: "木箱", detailTitle: "明细", contains: "包含", paperBox: "纸箱", serial: "序列号", content: "物品内容", countUnit: "个" },
             en: { selectBox: "Please select a wooden box", clickTip: "👈 Click any wooden box on the left to view details.", boxName: "Box", detailTitle: "Details", contains: "Contains", paperBox: "Carton", serial: "Serial No.", content: "Content", countUnit: "" },
@@ -117,48 +115,63 @@
             pt: { selectBox: "Selecione uma caixa de madeira", clickTip: "👈 Clique em uma caixa à esquerda para ver os detalhes.", boxName: "Caixa", detailTitle: "Detalhes", contains: "Contém", paperBox: "Caixa de papelão", serial: "Número de série", content: "Conteúdo", countUnit: "" }
         };
 
-        // ==========================================
-        // 📦 2. 你的木箱与纸箱数据 (示例：5个木箱)
-        // ==========================================
+        // 📦 2. 50个完全独立的木箱数据
+        // 你会发现每个木箱的纸箱数量和内容都是不一样的！
+        // 你可以直接在这里修改：serial 是序列号，content 是内容。
         const myData = [
-            {
-                boxName: { zh: "木箱 1", en: "Box 1", de: "Kiste 1", fr: "Caisse 1", it: "Cassa 1", ko: "상자 1", ja: "木箱 1", es: "Caja 1", pt: "Caixa 1" },
-                paperBoxes: [
-                    { id: 1, serial: "SN-A01", content: { zh: "冬天的厚衣服", en: "Winter clothes", de: "Winterkleidung", fr: "Vêtements d'hiver", it: "Vestiti invernali", ko: "겨울 옷", ja: "冬服", es: "Ropa de invierno", pt: "Roupas de inverno" } },
-                    { id: 2, serial: "SN-A02", content: { zh: "旧课本和笔记", en: "Old books", de: "Alte Bücher", fr: "Vieux livres", it: "Vecchi libri", ko: "오래된 책", ja: "古い本", es: "Libros viejos", pt: "Livros antigos" } }
-                ]
-            },
-            {
-                boxName: { zh: "木箱 2", en: "Box 2", de: "Kiste 2", fr: "Caisse 2", it: "Cassa 2", ko: "상자 2", ja: "木箱 2", es: "Caja 2", pt: "Caixa 2" },
-                paperBoxes: [
-                    { id: 1, serial: "SN-B01", content: { zh: "厨房不用的锅", en: "Kitchen pots", de: "Kochtöpfe", fr: "Marmites", it: "Pentole", ko: "주방 냄비", ja: "キッチンポット", es: "Ollas de cocina", pt: "Panelas" } }
-                ]
-            },
-            {
-                boxName: { zh: "木箱 3", en: "Box 3", de: "Kiste 3", fr: "Caisse 3", it: "Cassa 3", ko: "상자 3", ja: "木箱 3", es: "Caja 3", pt: "Caixa 3" },
-                paperBoxes: [
-                    { id: 1, serial: "SN-C01", content: { zh: "相机和镜头", en: "Camera & Lens", de: "Kamera", fr: "Appareil photo", it: "Fotocamera", ko: "카메라", ja: "カメラ", es: "Cámara", pt: "Câmera" } },
-                    { id: 2, serial: "SN-C02", content: { zh: "充电线和电池", en: "Cables & Batteries", de: "Kabel", fr: "Câbles", it: "Cavi", ko: "케이블", ja: "ケーブル", es: "Cables", pt: "Cabos" } }
-                ]
-            },
-            {
-                boxName: { zh: "木箱 4", en: "Box 4", de: "Kiste 4", fr: "Caisse 4", it: "Cassa 4", ko: "상자 4", ja: "木箱 4", es: "Caja 4", pt: "Caixa 4" },
-                paperBoxes: [
-                    { id: 1, serial: "SN-D01", content: { zh: "维修工具", en: "Tools", de: "Werkzeuge", fr: "Outils", it: "Attrezzi", ko: "도구", ja: "ツール", es: "Herramientas", pt: "Ferramentas" } }
-                ]
-            },
-            {
-                boxName: { zh: "木箱 5", en: "Box 5", de: "Kiste 5", fr: "Caisse 5", it: "Cassa 5", ko: "상자 5", ja: "木箱 5", es: "Caja 5", pt: "Caixa 5" },
-                paperBoxes: [
-                    { id: 1, serial: "SN-E01", content: { zh: "重要文件", en: "Documents", de: "Dokumente", fr: "Documents", it: "Documenti", ko: "서류", ja: "書類", es: "Documentos", pt: "Documentos" } },
-                    { id: 2, serial: "SN-E02", content: { zh: "合同和印章", en: "Contracts", de: "Verträge", fr: "Contrats", it: "Contratti", ko: "계약서", ja: "契約書", es: "Contratos", pt: "Contratos" } }
-                ]
-            }
+            { boxName: { zh: "木箱 1", en: "Box 1" }, paperBoxes: [ { id: 1, serial: "SN-01-A", content: "冬季保暖衣物" }, { id: 2, serial: "SN-01-B", content: "旧书和杂志" } ] },
+            { boxName: { zh: "木箱 2", en: "Box 2" }, paperBoxes: [ { id: 1, serial: "SN-02-A", content: "厨房锅具一套" } ] },
+            { boxName: { zh: "木箱 3", en: "Box 3" }, paperBoxes: [ { id: 1, serial: "SN-03-A", content: "摄影器材与镜头" }, { id: 2, serial: "SN-03-B", content: "三脚架" }, { id: 3, serial: "SN-03-C", content: "备用电池" } ] },
+            { boxName: { zh: "木箱 4", en: "Box 4" }, paperBoxes: [ { id: 1, serial: "SN-04-A", content: "维修五金工具" } ] },
+            { boxName: { zh: "木箱 5", en: "Box 5" }, paperBoxes: [ { id: 1, serial: "SN-05-A", content: "公司机密文件" }, { id: 2, serial: "SN-05-B", content: "合同原件" } ] },
+            { boxName: { zh: "木箱 6", en: "Box 6" }, paperBoxes: [ { id: 1, serial: "SN-06-A", content: "运动鞋两双" }, { id: 2, serial: "SN-06-B", content: "篮球" } ] },
+            { boxName: { zh: "木箱 7", en: "Box 7" }, paperBoxes: [ { id: 1, serial: "SN-07-A", content: "化妆护肤品收纳盒" } ] },
+            { boxName: { zh: "木箱 8", en: "Box 8" }, paperBoxes: [ { id: 1, serial: "SN-08-A", content: "宠物狗粮及零食" }, { id: 2, serial: "SN-08-B", content: "狗玩具" }, { id: 3, serial: "SN-08-C", content: "牵引绳" } ] },
+            { boxName: { zh: "木箱 9", en: "Box 9" }, paperBoxes: [ { id: 1, serial: "SN-09-A", content: "茶叶礼盒" } ] },
+            { boxName: { zh: "木箱 10", en: "Box 10" }, paperBoxes: [ { id: 1, serial: "SN-10-A", content: "易碎陶瓷碗盘" }, { id: 2, serial: "SN-10-B", content: "玻璃杯" } ] },
+            { boxName: { zh: "木箱 11", en: "Box 11" }, paperBoxes: [ { id: 1, serial: "SN-11-A", content: "数据线及充电头" }, { id: 2, serial: "SN-11-B", content: "旧手机" } ] },
+            { boxName: { zh: "木箱 12", en: "Box 12" }, paperBoxes: [ { id: 1, serial: "SN-12-A", content: "儿童毛绒玩具" } ] },
+            { boxName: { zh: "木箱 13", en: "Box 13" }, paperBoxes: [ { id: 1, serial: "SN-13-A", content: "机械键盘和鼠标" }, { id:.p 2, serial: "aperSN-13-B", content: "Box显示器支架" } ] },
+            {es boxName: { zh: "木箱 14", en: ".forEachBox 14" }, paper(pBoxes: [ { id: 1, serial: "SN-14-A", content: "露营帐篷" } ] },
+            { boxName: { zh: "木箱 15", en: "Box 15" }, paperBoxes: [ { id: 1, serial: "SN-15-A", content: "急救药品箱" }, { id: 2, serial: "SN-15-B", content: "口罩" } ] },
+            { boxName: { zh: "木箱 16", en: "Box 16" }, paperBoxes: [ { id: 1, serial: "SN-16-A", content: "汽车应急工具" } ] },
+            { boxName: { zh: "木箱 17", en: "Box 17" }, paperBoxes: [ { id: 1, serial: "SN-17-A", content: "咖啡机" }, { id: 2, serial: "SN-17-B", content: "咖啡豆" }, { id: 3, serial: "SN-17-C", content: "滤纸" } ] },
+            { boxName: { zh: "木箱 18", en: "Box 18" }, paperBoxes: [ { id: 1, serial: "SN-18-A", content: "乐高积木未拆封" } ] },
+            { boxName: { zh: "木箱 19", en: "Box 19" }, paperBoxes: [ { id: 1, serial: "SN-19-A", content: "吉他及配件" } ] },
+            { boxName: { zh: "木箱 20", en: "Box 20" }, paperBoxes: [ { id: 1, serial: "SN-20-A", content: "旅行箱" } ] },
+            { boxName: { zh: "木箱 21", en: "Box 21" }, paperBoxes: [ { id: 1, serial: "SN-21-A", content: "加湿器" } ] },
+            { boxName: { zh: "木箱 22", en: "Box 22" }, paperBoxes: [ { id: 1, serial: "SN-22-A", content: "空气净化器滤芯" }, { id: 2, serial: "SN-22-B", content: "备用吸尘器" } ] },
+            { boxName: { zh: "木箱 23", en: "Box 23" }, paperBoxes: [ { id: 1, serial: "SN-23-A", content: "床单被套" } ] },
+            { boxName: { zh: "木箱 24", en: "Box 24" }, paperBoxes: [ { id: 1, serial: "SN-24-A", content: "工具箱" } ] },
+            { boxName: { zh: "木箱 25", en: "Box 25" }, paperBoxes: [ { id: 1, serial: "SN-25-A", content: "防水登山包" }, { id: 2, serial: "SN-25-B", content: "登山杖" } ] },
+            { boxName: { zh: "木箱 26", en: "Box 26" }, paperBoxes: [ { id: 1, serial: "SN-26-A", content: "监控摄像头" } ] },
+            { boxName: { zh: "木箱 27", en: "Box 27" }, paperBoxes: [ { id: 1, serial: "SN-27-A", content: "电钻及钻头" } ] },
+            { boxName: { zh: "木箱 28", en: "Box 28" }, paperBoxes: [ { id: 1, serial: "SN-28-A", content: "画板和颜料" } ] },
+            { boxName: { zh: "木箱 29", en: "Box 29" }, paperBoxes: [ { id: 1, serial: "SN-29-A", content: "吸尘器" } ] },
+            { boxName: { zh: "木箱 30", en: "Box 30" }, paperBoxes: [ { id: 1, serial: "SN-30-A", content: "床垫保护罩" } ] },
+            { boxName: { zh: "木箱 31", en: "Box 31" }, paperBoxes: [ { id: 1, serial: "SN-31-A", content: "打印机" }, { id: 2, serial: "SN-31-B", content: "打印纸" } ] },
+            { boxName: { zh: "木箱 32", en: "Box 32" }, paperBoxes: [ { id: 1, serial: "SN-32-A", content: "风扇" } ] },
+            { boxName: { zh: "木箱 33", en: "Box 33" }, paperBoxes: [ { id: 1, serial: "SN-33-A", content: "路由器" } ] },
+            { boxName: { zh: "木箱 34", en: "Box 34" }, paperBoxes: [ { id: 1, serial: "SN-34-A", content: "降噪耳机" } ] },
+            { boxName: { zh: "木箱 35", en: "Box 35" }, paperBoxes: [ { id: 1, serial: "SN-35-A", content: "智能音箱" } ] },
+            { boxName: { zh: "木箱 36", en: "Box 36" }, paperBoxes: [ { id: 1, serial: "SN-36-A", content: "电动牙刷" } ] },
+            { boxName: { zh: "木箱 37", en: "Box 37" }, paperBoxes: [ { id: 1, serial: "SN-37-A", content: "电吹风" } ] },
+            { boxName: { zh: "木箱 38", en: "Box 38" }, paperBoxes: [ { id: 1, serial: "SN-38-A", content: "卷发棒" } ] },
+            { boxName: { zh: "木箱 39", en: "Box 39" }, paperBoxes: [ { id: 1, serial: "SN-39-A", content: "保温杯" } ] },
+            { boxName: { zh: "木箱 40", en: "Box 40" }, paperBoxes: [ { id: 1, serial: "SN-40-A", content: "雨伞" } ] },
+            { boxName: { zh: "木箱 41", en: "Box 41" }, paperBoxes: [ { id: 1, serial: "SN-41-A", content: "背包" } ] },
+            { boxName: { zh: "木箱 42", en: "Box 42" }, paperBoxes: [ { id: 1, serial: "SN-42-A", content: "钱包" } ] },
+            { boxName: { zh: "木箱 43", en: "Box 43" }, paperBoxes: [ { id: 1, serial: "SN-43-A", content: "手表" } ] },
+            { boxName: { zh: "木箱 44", en: "Box 44" }, paperBoxes: [ { id: 1, serial: "SN-44-A", content: "首饰盒" } ] },
+            { boxName: { zh: "木箱 45", en: "Box 45" }, paperBoxes: [ { id: 1, serial: "SN-45-A", content: "香水" } ] },
+            { boxName: { zh: "木箱 46", en: "Box 46" }, paperBoxes: [ { id: 1, serial: "SN-46-A", content: "墨镜" } ] },
+            { boxName: { zh: "木箱 47", en: "Box 47" }, paperBoxes: [ { id: 1, serial: "SN-47-A", content: "钥匙扣" } ] },
+            { boxName: { zh: "木箱 48", en: "Box 48" }, paperBoxes: [ { id: 1, serial: "SN-48-A", content: "打火机" } ] },
+            { boxName: { zh: "木箱 49", en: "Box 49" }, paperBoxes: [ { id: 1, serial: "SN-49-A", content: "指甲刀套装" } ] },
+            { boxName: { zh: "木箱 50", en: "Box 50" }, paperBoxes: [ { id: 1, serial: "SN-50-A", content: "急救包" } ] }
         ];
 
-        // ==========================================
         // ⚙️ 3. 核心运行逻辑
-        // ==========================================
         const gridContainer = document.getElementById('gridContainer');
         const panelTitle = document.getElementById('panelTitle');
         const boxCount = document.getElementById('boxCount');
@@ -210,7 +223,7 @@
             if (box.paperBoxes.length === 0) {
                 htmlStr = '<p style="color:#999;">Empty</p>';
             } else {
-                box.paperBoxes.forEach(pBox => {
+                boxBox => {
                     htmlStr += `
                         <div class="paper-box-item">
                             <div class="paper-box-title">📦 ${t.paperBox} ${pBox.id}</div>
