@@ -3,90 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>50个独立木箱库存</title>
+    <title>我的木箱系统</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6; color: #333;
-            display: flex; height: 100vh; padding: 20px; gap: 20px;
-            position: relative;
+            font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f6; color: #333;
+            display: flex; height: 100vh; padding: 15px; gap: 15px; position: relative;
         }
-        /* 语言切换器 */
         .lang-switcher {
-            position: absolute; top: 20px; right: 20px; z-index: 100;
-            background: white; padding: 10px 15px; border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 10px; font-weight: bold;
+            position: absolute; top: 15px; right: 15px; background: white; padding: 8px 12px; 
+            border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 100;
         }
-        select {
-            padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;
-            font-size: 14px; cursor: pointer; outline: none;
-        }
-        /* 左侧木箱网格 */
+        select { padding: 5px; border-radius: 5px; border: 1px solid #ccc; }
+        
+        /* 左侧网格 */
         .grid-container {
-            flex: 1; display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 10px; align-content: start;
-            background: #fff; padding: 20px; border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-y: auto;
-            margin-top: 50px;
+            flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px; align-content: start; background: #fff; padding: 15px; 
+            border-radius: 12px; overflow-y: auto; margin-top: 45px;
         }
         .wood-box-btn {
-            background: #8d6e63; border: 2px solid #5d4037;
-            border-radius: 6px; padding: 12px 5px;
-            font-size: 14px; font-weight: bold; color: #fff;
-            cursor: pointer; transition: all 0.2s ease;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1);
+            background: #8d6e63; border: 2px solid #5d4037; border-radius: 6px; 
+            padding: 10px; font-size: 13px; font-weight: bold; color: #fff; cursor: pointer;
         }
-        .wood-box-btn::before { content: "📦"; font-size: 20px; margin-bottom: 5px; }
-        .wood-box-btn:hover { background: #795548; transform: translateY(-3px); }
+        .wood-box-btn:hover { background: #795548; }
         .wood-box-btn.active { background: #3e2723; border-color: #ffb300; color: #ffb300; }
-
-        /* 右侧明细 */
+        
+        /* 右侧面板 */
         .detail-panel {
-            width: 400px; background: white; border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 25px;
-            display: flex; flex-direction: column; border-top: 5px solid #8d6e63;
-            margin-top: 50px;
+            width: 350px; background: white; border-radius: 12px; padding: 20px;
+            display: flex; flex-direction: column; border-top: 5px solid #8d6e63; margin-top: 45px;
         }
-        .detail-panel h2 { color: #5d4037; margin-bottom: 5px; padding-bottom: 10px; border-bottom: 2px solid #efebe9; }
-        .box-count { font-size: 14px; color: #888; margin-bottom: 20px; }
-        .detail-content { font-size: 15px; color: #555; flex: 1; overflow-y: auto; }
-
+        .detail-panel h2 { color: #5d4037; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .detail-content { font-size: 14px; overflow-y: auto; flex: 1; }
+        
         /* 纸箱卡片 */
         .paper-box-item {
-            background: #fff8e1; border: 1px solid #ffe0b2; border-left: 4px solid #ffb300;
-            padding: 12px 15px; border-radius: 6px; margin-bottom: 12px;
+            background: #fff8e1; border-left: 4px solid #ffb300; padding: 10px; 
+            margin-bottom: 10px; border-radius: 4px;
         }
-        .paper-box-title { font-weight: bold; color: #e65100; margin-bottom: 8px; font-size: 16px; }
-        .paper-box-row { font-size: 14px; color: #666; margin-bottom: 4px; display: flex; }
-        .paper-box-row span.label { width: 100px; color: #999; }
-        .paper-box-row span.value { font-weight: 500; color: #333; flex: 1; }
+        .paper-box-title { font-weight: bold; color: #e65100; margin-bottom: 5px; }
+        .row { display: flex; margin-bottom: 3px; color: #555; }
+        .row span.label { width: 70px; color: #999; }
         
         @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; padding-top: 70px; }
-            .lang-switcher { top: 10px; right: 10px; width: calc(100% - 20px); justify-content: space-between; }
+            body { flex-direction: column; height: auto; padding-top: 60px; }
+            .lang-switcher { top: 10px; right: 10px; width: calc(100% - 20px); text-align: right; }
             .grid-container, .detail-panel { margin-top: 0; width: 100%; }
-            .detail-panel { border-top: none; border-left: 5px solid #8d6e63; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 语言切换器 -->
     <div class="lang-switcher">
-        <label>🌐 Lang:</label>
-        <select id="langSelect" onchange="changeLanguage(this.value)">
-            <option value="zh">中文</option>
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-            <option value="it">Italiano</option>
-            <option value="ko">한국어</option>
-            <option value="ja">日本語</option>
-            <option value="es">Español</option>
+        🌐 语言: <select id="langSelect" onchange="changeLanguage(this.value)">
+            <option value="zh">中文</option><option value="en">English</option>
+            <option value="de">Deutsch</option><option value="fr">Français</option>
+            <option value="it">Italiano</option><option value="ko">한국어</option>
+            <option value="ja">日本語</option><option value="es">Español</option>
             <option value="pt">Português</option>
         </select>
     </div>
@@ -94,114 +68,125 @@
     <div class="grid-container" id="gridContainer"></div>
 
     <div class="detail-panel">
-        <h2 id="panelTitle" data-i18n="selectBox">请选择木箱</h2>
-        <div class="box-count" id="boxCount"></div>
-        <div class="detail-content" id="panelContent" data-i18n="clickTip">
-            👈 点击左侧任意木箱，查看里面的纸箱明细。
-        </div>
+        <h2 id="panelTitle">请选择木箱</h2>
+        <div class="detail-content" id="panelContent">👈 点击左侧查看明细。</div>
     </div>
 
     <script>
-        // 🌐 1. 界面多语言字典
-        const translations = {
-            zh: { selectBox: "请选择木箱", clickTip: "👈 点击左侧任意木箱，查看里面的纸箱明细。", boxName: "木箱", detailTitle: "明细", contains: "包含", paperBox: "纸箱", serial: "序列号", content: "物品内容", countUnit: "个" },
-            en: { selectBox: "Please select a wooden box", clickTip: "👈 Click any wooden box on the left to view details.", boxName: "Box", detailTitle: "Details", contains: "Contains", paperBox: "Carton", serial: "Serial No.", content: "Content", countUnit: "" },
-            de: { selectBox: "Bitte wählen Sie eine Holzkiste", clickTip: "👈 Klicken Sie links auf eine Kiste für Details.", boxName: "Kiste", detailTitle: "Details", contains: "Enthält", paperBox: "Karton", serial: "Seriennummer", content: "Inhalt", countUnit: "" },
-            fr: { selectBox: "Veuillez sélectionner une caisse", clickTip: "👈 Cliquez sur une caisse à gauche pour voir les détails.", boxName: "Caisse", detailTitle: "Détails", contains: "Contient", paperBox: "Carton", serial: "Numéro de série", content: "Contenu", countUnit: "" },
-            it: { selectBox: "Seleziona una cassa di legno", clickTip: "👈 Clicca su una cassa a sinistra per i dettagli.", boxName: "Cassa", detailTitle: "Dettagli", contains: "Contiene", paperBox: "Scatola", serial: "Numero di serie", content: "Contenuto", countUnit: "" },
-            ko: { selectBox: "나무 상자를 선택하세요", clickTip: "👈 왼쪽의 나무 상자를 클릭하여 세부 정보를 확인하세요.", boxName: "상자", detailTitle: "세부 정보", contains: "포함", paperBox: "종이 상자", serial: "일련 번호", content: "내용물", countUnit: "개" },
-            ja: { selectBox: "木箱を選択してください", clickTip: "👈 左側の木箱をクリックして詳細を表示します。", boxName: "木箱", detailTitle: "明細", contains: "含む", paperBox: "段ボール箱", serial: "シリアル番号", content: "内容物", countUnit: "個" },
-            es: { selectBox: "Seleccione una caja de madera", clickTip: "👈 Haga clic en una caja a la izquierda para ver los detalles.", boxName: "Caja", detailTitle: "Detalles", contains: "Contiene", paperBox: "Caja de cartón", serial: "Número de serie", content: "Contenido", countUnit: "" },
-            pt: { selectBox: "Selecione uma caixa de madeira", clickTip: "👈 Clique em uma caixa à esquerda para ver os detalhes.", boxName: "Caixa", detailTitle: "Detalhes", contains: "Contém", paperBox: "Caixa de papelão", serial: "Número de série", content: "Conteúdo", countUnit: "" }
+        // 🌐 1. 界面多语言（只翻译按钮和标题，节约代码）
+        const t = {
+            zh: { box: "木箱", details: "明细", carton: "纸箱", sn: "序列号", item: "物品", tip: "👈 点击左侧查看明细。" },
+            en: { box: "Box", details: "Details", carton: "Carton", sn: "S/N", item: "Item", tip: "👈 Click left to view." },
+            de: { box: "Kiste", details: "Details", carton: "Karton", sn: "S/N", item: "Inhalt", tip: "👈 Klicken Sie links." },
+            fr: { box: "Caisse", details: "Détails", carton: "Carton", sn: "N/S", item: "Contenu", tip: "👈 Cliquez à gauche." },
+            it: { box: "Cassa", details: "Dettagli", carton: "Scatola", sn: "N/S", item: "Contenuto", tip: "👈 Clicca a sinistra." },
+            ko: { box: "상자", details: "세부 정보", carton: "종이 상자", sn: "일련 번호", item: "내용물", tip: "👈 왼쪽을 클릭하세요." },
+            ja: { box: "木箱", details: "明細", carton: "段ボール", sn: "S/N", item: "内容物", tip: "👈 左をクリック。" },
+            es: { box: "Caja", details: "Detalles", carton: "Caja", sn: "N/S", item: "Contenido", tip: "👈 Haga clic a la izquierda." },
+            pt: { box: "Caixa", details: "Detalhes", carton: "Caixa", sn: "N/S", item: "Conteúdo", tip: "👈 Clique à esquerda." }
         };
 
-        // 📦 2. 50个完全独立的木箱数据
-        // 你会发现每个木箱的纸箱数量和内容都是不一样的！
-        // 你可以直接在这里修改：serial 是序列号，content 是内容。
+        // 📦 2. 数据区（最纯粹的格式，绝对不会错）
+        // 我把 50 个木箱分成了 50 行。你可以直接修改双引号里的文字。
         const myData = [
-            { boxName: { zh: "木箱 1", en: "Box 1" }, paperBoxes: [ { id: 1, serial: "SN-01-A", content: "冬季保暖衣物" } ] },
-            { boxName: { zh: "木箱 2", en: "Box 2" }, paperBoxes: [ { id: 1, serial: "SN-02-A", content: "厨房锅具一套" } ] },
-            { boxName: { zh: "木箱 3", en: "Box 3" }, paperBoxes: [ { id: 1, serial: "SN-03-A", content: "摄影器材与镜头" } ] }
-            // 后面继续加木箱...
+            { id: 1, boxes: [ { id: 1, sn: "SN-01A", item: "冬季衣物" }, { id: 2, sn: "SN-01B", item: "旧书" } ] },
+            { id: 2, boxes: [ { id: 1, sn: "SN-02A", item: "厨房锅具" } ] },
+            { id: 3, boxes: [ { id: 1, sn: "SN-03A", item: "相机" }, { id: 2, sn: "SN-03B", item: "镜头" }, { id: 3, sn: "SN-03C", item: "三脚架" } ] },
+            { id: 4, boxes: [ { id: 1, sn: "SN-04A", item: "五金工具" } ] },
+            { id: 5, boxes: [ { id: 1, sn: "SN-05A", item: "合同" }, { id: 2, sn: "SN-05B", item: "印章" } ] },
+            { id: 6, boxes: [ { id: 1, sn: "SN-06A", item: "运动鞋" } ] },
+            { id: 7, boxes: [ { id: 1, sn: "SN-07A", item: "化妆品" } ] },
+            { id: 8, boxes: [ { id: 1, sn: "SN-08A", item: "狗粮" }, { id: 2, sn: "SN-08B", item: "狗玩具" } ] },
+            { id: 9, boxes: [ { id: 1, sn: "SN-09A", item: "茶叶" } ] },
+            { id: 10, boxes: [ { id: 1, sn: "SN-10A", item: "陶瓷碗" } ] },
+            { id: 11, boxes: [ { id: 1, sn: "SN-11A", item: "数据线" } ] },
+            { id: 12, boxes: [ { id: 1, sn: "SN-12A", item: "毛绒玩具" } ] },
+            { id: 13, boxes: [ { id: 1, sn: "SN-13A", item: "键盘" }, { id: 2, sn: "SN-13B", item: "鼠标" } ] },
+            { id: 14, boxes: [ { id: 1, sn: "SN-14A", item: "帐篷" } ] },
+            { id: 15, boxes: [ { id: 1, sn: "SN-15A", item: "急救药" } ] },
+            { id: 16, boxes: [ { id: 1, sn: "SN-16A", item: "车用工具" } ] },
+            { id: 17, boxes: [ { id: 1, sn: "SN-17A", item: "咖啡机" }, { id: 2, sn: "SN-17B", item: "咖啡豆" } ] },
+            { id: 18, boxes: [ { id: 1, sn: "SN-18A", item: "乐高" } ] },
+            { id: 19, boxes: [ { id: 1, sn: "SN-19A", item: "吉他" } ] },
+            { id: 20, boxes: [ { id: 1, sn: "SN-20A", item: "行李箱" } ] },
+            { id: 21, boxes: [ { id: 1, sn: "SN-21A", item: "加湿器" } ] },
+            { id: 22, boxes: [ { id: 1, sn: "SN-22A", item: "滤芯" } ] },
+            { id: 23, boxes: [ { id: 1, sn: "SN-23A", item: "床单" } ] },
+            { id: 24, boxes: [ { id: 1, sn: "SN-24A", item: "工具箱" } ] },
+            { id: 25, boxes: [ { id: 1, sn: "SN-25A", item: "登山包" } ] },
+            { id: 26, boxes: [ { id: 1, sn: "SN-26A", item: "摄像头" } ] },
+            { id: 27, boxes: [ { id: 1, sn: "SN-27A", item: "电钻" } ] },
+            { id: 28, boxes: [ { id: 1, sn: "SN-28A", item: "画板" } ] },
+            { id: 29, boxes: [ { id: 1, sn: "SN-29A", item: "吸尘器" } ] },
+            { id: 30, boxes: [ { id: 1, sn: "SN-30A", item: "床垫罩" } ] },
+            { id: 31, boxes: [ { id: 1, sn: "SN-31A", item: "打印机" }, { id: 2, sn: "SN-31B", item: "打印纸" } ] },
+            { id: 32, boxes: [ { id: 1, sn: "SN-32A", item: "风扇" } ] },
+            { id: 33, boxes: [ { id: 1, sn: "SN-33A", item: "路由器" } ] },
+            { id: 34, boxes: [ { id: 1, sn: "SN-34A", item: "耳机" } ] },
+            { id: 35, boxes: [ { id: 1, sn: "SN-35A", item: "音箱" } ] },
+            { id: 36, boxes: [ { id: 1, sn: "SN-36A", item: "牙刷" } ] },
+            { id: 37, boxes: [ { id: 1, sn: "SN-37A", item: "吹风机" } ] },
+            { id: 38, boxes: [ { id: 1, sn: "SN-38A", item: "卷发棒" } ] },
+            { id: 39, boxes: [ { id: 1, sn: "SN-39A", item: "保温杯" } ] },
+            { id: 40, boxes: [ { id: 1, sn: "SN-40A", item: "雨伞" } ] },
+            { id: 41, boxes: [ { id: 1, sn: "SN-41A", item: "背包" } ] },
+            { id: 42, boxes: [ { id: 1, sn: "SN-42A", item: "钱包" } ] },
+            { id: 43, boxes: [ { id: 1, sn: "SN-43A", item: "手表" } ] },
+            { id: 44, boxes: [ { id: 1, sn: "SN-44A", item: "首饰" } ] },
+            { id: 45, boxes: [ { id: 1, sn: "SN-45A", item: "香水" } ] },
+            { id: 46, boxes: [ { id: 1, sn: "SN-46A", item: "墨镜" } ] },
+            { id: 47, boxes: [ { id: 1, sn: "SN-47A", item: "钥匙扣" } ] },
+            { id: 48, boxes: [ { id: 1, sn: "SN-48A", item: "打火机" } ] },
+            { id: 49, boxes: [ { id: 1, sn: "SN-49A", item: "指甲刀" } ] },
+            { id: 50, boxes: [ { id: 1, sn: "SN-50A", item: "急救包" } ] }
         ];
 
-        // ⚙️ 3. 核心运行逻辑
-        const gridContainer = document.getElementById('gridContainer');
-        const panelTitle = document.getElementById('panelTitle');
-        const boxCount = document.getElementById('boxCount');
-        const panelContent = document.getElementById('panelContent');
+        // ⚙️ 3. 渲染逻辑
         let currentLang = 'zh';
-        let activeBoxIndex = -1;
+        let activeIdx = -1;
 
-        function getText(obj) {
-            if (typeof obj === 'string') return obj;
-            return obj[currentLang] || obj['en'] || obj['zh'];
-        }
-
-        function renderApp() {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                el.innerText = translations[currentLang][el.getAttribute('data-i18n')];
-            });
-
-            gridContainer.innerHTML = '';
+        function render() {
+            const text = t[currentLang];
+            document.getElementById('panelContent').innerHTML = activeIdx === -1 ? text.tip : document.getElementById('panelContent').innerHTML;
+            
+            const grid = document.getElementById('gridContainer');
+            grid.innerHTML = '';
+            
             myData.forEach((box, index) => {
                 const btn = document.createElement('button');
-                btn.className = 'wood-box-btn';
-                if (index === activeBoxIndex) btn.classList.add('active');
-                
-                const boxNameStr = box.boxName[currentLang] ? box.boxName[currentLang] : `${translations[currentLang].boxName} ${index + 1}`;
-                btn.innerText = boxNameStr;
-                
-                btn.addEventListener('click', function() {
-                    activeBoxIndex = index;
-                    renderApp();
-                    showDetails(index);
-                });
-                gridContainer.appendChild(btn);
+                btn.className = 'wood-box-btn' + (index === activeIdx ? ' active' : '');
+                btn.innerText = `${text.box} ${box.id}`;
+                btn.onclick = () => {
+                    activeIdx = index;
+                    render();
+                    show(box);
+                };
+                grid.appendChild(btn);
             });
-
-            if (activeBoxIndex !== -1) {
-                showDetails(activeBoxIndex);
-            }
         }
 
-        function showDetails(index) {
-            const box = myData[index];
-            const t = translations[currentLang];
-            const boxTitleStr = box.boxName[currentLang] ? box.boxName[currentLang] : `${t.boxName} ${index + 1}`;
+        function show(box) {
+            const text = t[currentLang];
+            document.getElementById('panelTitle').innerText = `${text.box} ${box.id} ${text.details}`;
             
-            panelTitle.innerText = `${boxTitleStr} ${t.detailTitle}`;
-            boxCount.innerText = `${t.contains} ${box.paperBoxes.length} ${t.countUnit} ${t.paperBox}`;
-
-            let htmlStr = '';
-            if (box.paperBoxes.length === 0) {
-                htmlStr = '<p style="color:#999;">Empty</p>';
-            } else {
-                boxBox => {
-                    htmlStr += `
-                        <div class="paper-box-item">
-                            <div class="paper-box-title">📦 ${t.paperBox} ${pBox.id}</div>
-                            <div class="paper-box-row">
-                                <span class="label">${t.serial}:</span>
-                                <span class="value">${pBox.serial}</span>
-                            </div>
-                            <div class="paper-box-row">
-                                <span class="label">${t.content}:</span>
-                                <span class="value">${getText(pBox.content)}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            panelContent.innerHTML = htmlStr;
+            let html = '';
+            box.boxes.forEach(pBox => {
+                html += `<div class="paper-box-item">
+                    <div class="paper-box-title">📦 ${text.carton} ${pBox.id}</div>
+                    <div class="row"><span class="label">${text.sn}:</span><span>${pBox.sn}</span></div>
+                    <div class="row"><span class="label">${text.item}:</span><span>${pBox.item}</span></div>
+                </div>`;
+            });
+            document.getElementById('panelContent').innerHTML = html;
         }
 
         function changeLanguage(lang) {
             currentLang = lang;
-            renderApp();
+            render();
+            if (activeIdx !== -1) show(myData[activeIdx]);
         }
 
-        renderApp();
+        render(); // 启动
     </script>
 </body>
 </html>
