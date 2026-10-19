@@ -3,153 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>木箱与纸箱库存系统</title>
+    <title>我的专属木箱系统</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            display: flex;
-            height: 100vh;
-            padding: 20px;
-            gap: 20px;
+            background-color: #f4f7f6; color: #333;
+            display: flex; height: 100vh; padding: 20px; gap: 20px;
         }
-
-        /* 左侧：20个木箱区域 */
+        /* 左侧木箱 */
         .grid-container {
-            flex: 1;
-            display: grid;
+            flex: 1; display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: 15px;
-            align-content: start;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            overflow-y: auto;
+            gap: 15px; align-content: start;
+            background: #fff; padding: 20px; border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-y: auto;
         }
-
-        /* 木箱按钮样式 */
         .wood-box-btn {
-            background: #8d6e63; /* 木色 */
-            border: 2px solid #5d4037;
-            border-radius: 6px;
-            padding: 15px 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1);
+            background: #8d6e63; border: 2px solid #5d4037;
+            border-radius: 6px; padding: 15px 10px;
+            font-size: 16px; font-weight: bold; color: #fff;
+            cursor: pointer; transition: all 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; box-shadow: inset 0 0 10px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        /* 用伪元素模拟木箱上的封条/钉子 */
-        .wood-box-btn::before {
-            content: "📦";
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
+        .wood-box-btn::before { content: "📦"; font-size: 28px; margin-bottom: 5px; }
         .wood-box-btn::after {
-            content: "";
-            position: absolute;
-            top: 10px; bottom: 10px; left: 50%;
-            width: 2px;
-            background: rgba(255,255,255,0.2);
-            transform: translateX(-50%);
+            content: ""; position: absolute; top: 10px; bottom: 10px; left: 50%;
+            width: 2px; background: rgba(255,255,255,0.2); transform: translateX(-50%);
         }
-
-        .wood-box-btn:hover {
-            background: #795548;
-            transform: translateY(-3px);
-        }
-        
+        .wood-box-btn:hover { background: #795548; transform: translateY(-3px); }
         .wood-box-btn.active {
-            background: #3e2723; /* 深褐色选中 */
-            border-color: #ffb300;
-            color: #ffb300;
+            background: #3e2723; border-color: #ffb300; color: #ffb300;
         }
 
-        /* 右侧：纸箱明细面板 */
+        /* 右侧明细 */
         .detail-panel {
-            width: 400px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            border-top: 5px solid #8d6e63;
+            width: 400px; background: white; border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 25px;
+            display: flex; flex-direction: column; border-top: 5px solid #8d6e63;
         }
+        .detail-panel h2 { color: #5d4037; margin-bottom: 5px; padding-bottom: 10px; border-bottom: 2px solid #efebe9; }
+        .box-count { font-size: 14px; color: #888; margin-bottom: 20px; }
+        .detail-content { font-size: 15px; color: #555; flex: 1; overflow-y: auto; }
 
-        .detail-panel h2 {
-            color: #5d4037;
-            margin-bottom: 5px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #efebe9;
-        }
-        
-        .box-count {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 20px;
-        }
-
-        .detail-content {
-            font-size: 15px;
-            color: #555;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        /* 纸箱列表样式 */
+        /* 纸箱卡片 */
         .paper-box-item {
-            background: #fff8e1; /* 纸箱淡黄色 */
-            border: 1px solid #ffe0b2;
-            border-left: 4px solid #ffb300;
-            padding: 12px 15px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            transition: transform 0.2s;
+            background: #fff8e1; border: 1px solid #ffe0b2; border-left: 4px solid #ffb300;
+            padding: 12px 15px; border-radius: 6px; margin-bottom: 12px; transition: transform 0.2s;
         }
+        .paper-box-item:hover { transform: translateX(5px); }
+        .paper-box-title { font-weight: bold; color: #e65100; margin-bottom: 8px; font-size: 16px; }
+        .paper-box-row { font-size: 14px; color: #666; margin-bottom: 4px; display: flex; }
+        .paper-box-row span.label { width: 70px; color: #999; }
+        .paper-box-row span.value { font-weight: 500; color: #333; flex: 1; }
         
-        .paper-box-item:hover {
-            transform: translateX(5px);
-        }
-
-        .paper-box-title {
-            font-weight: bold;
-            color: #e65100;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        .paper-box-row {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 4px;
-            display: flex;
-        }
-        .paper-box-row span.label {
-            width: 70px;
-            color: #999;
-        }
-        .paper-box-row span.value {
-            font-weight: 500;
-            color: #333;
-            flex: 1;
-        }
-        
-        /* 手机响应式 */
         @media (max-width: 768px) {
             body { flex-direction: column; height: auto; }
             .detail-panel { width: 100%; border-top: none; border-left: 5px solid #8d6e63; }
@@ -176,71 +84,77 @@
         const boxCount = document.getElementById('boxCount');
         const panelContent = document.getElementById('panelContent');
 
-        // 模拟物品数据池
-        const itemsPool = ["电子元器件", "文件档案", "秋冬衣物", "精装书籍", "厨房餐具", "运动装备", "汽车配件", "医疗物资", "化妆护肤品", "宠物用品", "茶叶礼盒", "陶瓷制品", "五金工具", "玩具公仔", "摄影器材", "鞋类", "酒水饮料", "五金配件", "床上用品", "露营装备"];
+        // =========================================================
+        // 👇👇👇 就在这里修改你自己的数据 👇👇👇
+        // =========================================================
+        // 你可以随时添加或删除里面的 { ... } 来增加或减少纸箱
+        // 格式必须是：{ id: 纸箱编号, serial: "你的序列号", content: "里面的内容" }
 
-        // 生成 20 个木箱的数据
-        const woodBoxes = [];
-        for (let i = 1; i <= 20; i++) {
-            // 每个木箱里随机装 1 到 5 个纸箱
-            const paperBoxCount = Math.floor(Math.random() * 5) + 1; 
-            const paperBoxes = [];
-            
-            for (let j = 1; j <= paperBoxCount; j++) {
-                // 生成随机序列号，例如: PL-2023-8A9F
-                const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
-                const serialNumber = `BX-${i.toString().padStart(2, '0')}-${randomStr}`;
-                
-                // 随机抽一个物品内容
-                const itemContent = itemsPool[Math.floor(Math.random() * itemsPool.length)];
-                
-                paperBoxes.push({
-                    id: j,
-                    serial: serialNumber,
-                    content: itemContent
-                });
+        const myData = [
+            {
+                boxName: "木箱 1", // 网页上显示的按钮名字
+                paperBoxes: [
+                    { id: 1, serial: "SN-2023-A01", content: "冬天的厚衣服" },
+                    { id: 2, serial: "SN-2023-A02", content: "旧课本和笔记" }
+                    // 想要装第三个就加一行：{ id: 3, serial: "XXX", content: "XXX" },
+                ]
+            },
+            {
+                boxName: "木箱 2",
+                paperBoxes: [
+                    { id: 1, serial: "SN-2023-B01", content: "厨房不用的锅" }
+                ]
+            },
+            {
+                boxName: "木箱 3",
+                paperBoxes: [
+                    { id: 1, serial: "SN-2023-C01", content: "相机和镜头" },
+                    { id: 2, serial: "SN-2023-C02", content: "充电线和电池" },
+                    { id: 3, serial: "SN-2023-C03", content: "三脚架" }
+                ]
             }
+            // 如果你想要正好20个木箱，就照着上面的格式，一直复制粘贴到 木箱 20 即可。
+            // 别忘了在每个 { } 之间加个英文逗号 ,
+        ];
 
-            woodBoxes.push({
-                id: i,
-                count: paperBoxCount,
-                paperBoxes: paperBoxes
-            });
-        }
+        // =========================================================
+        // 👆👆👆 数据修改到此结束，下面的代码不用动 👆👆👆
+        // =========================================================
 
         // 渲染左侧木箱按钮
-        woodBoxes.forEach(box => {
+        myData.forEach((box, index) => {
             const btn = document.createElement('button');
             btn.className = 'wood-box-btn';
-            btn.innerText = `木箱 ${box.id}`;
+            btn.innerText = box.boxName;
             
             btn.addEventListener('click', function() {
-                // 1. 切换按钮高亮状态
                 document.querySelectorAll('.wood-box-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 
-                // 2. 更新标题和数量
-                panelTitle.innerText = `木箱 ${box.id} 明细`;
-                boxCount.innerText = `包含 ${box.count} 个纸箱`;
+                panelTitle.innerText = `${box.boxName} 明细`;
+                boxCount.innerText = `包含 ${box.paperBoxes.length} 个纸箱`;
                 
-                // 3. 渲染里面的纸箱列表
                 let htmlStr = '';
-                box.paperBoxes.forEach(pBox => {
-                    htmlStr += `
-                        <div class="paper-box-item">
-                            <div class="paper-box-title">📦 纸箱 ${pBox.id}</div>
-                            <div class="paper-box-row">
-                                <span class="label">序列号:</span>
-                                <span class="value">${pBox.serial}</span>
+                // 如果这个木箱里是空的
+                if (box.paperBoxes.length === 0) {
+                    htmlStr = '<p style="color:#999;">这个木箱是空的。</p>';
+                } else {
+                    box.paperBoxes.forEach(pBox => {
+                        htmlStr += `
+                            <div class="paper-box-item">
+                                <div class="paper-box-title">📦 纸箱 ${pBox.id}</div>
+                                <div class="paper-box-row">
+                                    <span class="label">序列号:</span>
+                                    <span class="value">${pBox.serial}</span>
+                                </div>
+                                <div class="paper-box-row">
+                                    <span class="label">物品内容:</span>
+                                    <span class="value">${pBox.content}</span>
+                                </div>
                             </div>
-                            <div class="paper-box-row">
-                                <span class="label">物品内容:</span>
-                                <span class="value">${pBox.content}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                
+                        `;
+                    });
+                }
                 panelContent.innerHTML = htmlStr;
             });
 
